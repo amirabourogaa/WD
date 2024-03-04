@@ -966,6 +966,7 @@
         </div>
 
         <form
+        id="myForm"
           action="forms/contact.php"
           method="post"
           role="form"
@@ -987,7 +988,7 @@
                 type="email"
                 class="form-control"
                 name="email"
-                id="email"
+                id="to"
                 placeholder="Votre adresse mail"
                 required
               />
@@ -1005,6 +1006,7 @@
           </div>
           <div class="form-group mt-3">
             <textarea
+            id="message"
               class="form-control"
               name="message"
               rows="5"
@@ -1012,13 +1014,13 @@
               required
             ></textarea>
           </div>
-          <div class="my-3">
+          <!-- <div class="my-3">
             <div class="loading">Loading</div>
             <div class="error-message"></div>
             <div class="sent-message">
               Votre message est bien envoyé. Merci!
             </div>
-          </div>
+          </div> -->
           <div class="text-center">
             <button type="submit">Envoyer</button>
           </div>
@@ -1035,8 +1037,58 @@
     <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
     <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="stylesheet" href="sweetalert2.min.css">
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
+    <script>
+
+       // Initialize EmailJS with your user ID
+emailjs.init("muusptsqVHd-E9LtI");
+
+// Get reference to the form element
+const form = document.getElementById("myForm");
+
+// Attach an event listener to the form's submit event
+form.addEventListener("submit", function(event) {
+event.preventDefault(); // Prevent the default form submission
+
+// Get form values
+const to = document.getElementById("to").value;
+const name = document.getElementById("name").value;
+const subject = document.getElementById("subject").value;
+const message = document.getElementById("message").value;
+const params = {
+  name,
+  to,
+  subject,
+  message
+}
+
+console.log(params)
+// Use the EmailJS send method
+emailjs.send("service_miw7q8g", "template_ysayiy4", {
+subject: subject,
+name: name,
+message: message,
+reply_to: to,
+})
+.then(function(response) {
+Swal.fire({
+icon: 'success',
+title: 'Done',
+text: 'Email sent successfully',
+footer: '<a href="">Thank you</a>'
+})
+}, function(error) {
+alert("Email not sent:");
+
+});
+});
+  </script>
   </body>
 </html>
